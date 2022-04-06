@@ -9,6 +9,12 @@ type writer struct {
 	code int
 }
 
+func (w *writer) Flush() {
+	if fl, ok := w.w.(http.Flusher); ok {
+		fl.Flush()
+	}
+}
+
 func (w *writer) WriteHeader(code int) {
 	w.code = code
 	w.w.WriteHeader(code)

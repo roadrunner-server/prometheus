@@ -26,6 +26,7 @@ type Plugin struct {
 	noFreeWorkers   *prometheus.CounterVec
 	requestCounter  *prometheus.CounterVec
 	requestDuration *prometheus.HistogramVec
+	uptime          *prometheus.CounterVec
 }
 
 func (p *Plugin) Init() error {
@@ -65,10 +66,26 @@ func (p *Plugin) Init() error {
 		[]string{"status"},
 	)
 
+	p.uptime = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Namespace: namespace,
+		Name:      "uptime_seconds",
+		Help:      "Uptime in seconds",
+	}, nil)
+
 	return nil
 }
 
 func (p *Plugin) Serve() chan error {
+	go func() {
+		ticker := time.NewTicker(time.Second)
+		defer ticker.Stop()
+		select {
+		case <-p.stopCh:
+			return
+		case <-ticker.C:
+			p.uptime.With(nil).Inc()
+		}
+	}()
 	return make(chan error, 1)
 }
 
@@ -110,7 +127,7 @@ func (p *Plugin) Name() string {
 }
 
 func (p *Plugin) MetricsCollector() []prometheus.Collector {
-	return []prometheus.Collector{p.requestCounter, p.requestDuration, p.queueSize, p.noFreeWorkers}
+	return []prometheus.Collector{p.requestCounter, p.requestDuration, p.queueSize, p.noFreeWorkers, p.uptime}
 }
 
 func (p *Plugin) getWriter(w http.ResponseWriter) *writer {
