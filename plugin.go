@@ -79,11 +79,13 @@ func (p *Plugin) Serve() chan error {
 	go func() {
 		ticker := time.NewTicker(time.Second)
 		defer ticker.Stop()
-		select {
-		case <-p.stopCh:
-			return
-		case <-ticker.C:
-			p.uptime.With(nil).Inc()
+		for {
+			select {
+			case <-p.stopCh:
+				return
+			case <-ticker.C:
+				p.uptime.With(nil).Inc()
+			}
 		}
 	}()
 	return make(chan error, 1)
