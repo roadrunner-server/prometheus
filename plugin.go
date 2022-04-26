@@ -7,6 +7,8 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/roadrunner-server/sdk/v2/utils"
+	"go.opentelemetry.io/otel/trace"
 )
 
 const (
@@ -98,6 +100,13 @@ func (p *Plugin) Stop() error {
 
 func (p *Plugin) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if val, ok := r.Context().Value(utils.OtelTracerNameKey).(string); ok {
+			tp := trace.SpanFromContext(r.Context()).TracerProvider()
+			ctx, span := tp.Tracer(val).Start(r.Context(), pluginName)
+			defer span.End()
+			r = r.WithContext(ctx)
+		}
+
 		start := time.Now()
 
 		// overwrite original rw, because we need to delete sensitive rr_newrelic headers
