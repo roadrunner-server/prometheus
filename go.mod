@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/prometheus/client_golang v1.12.1
-	github.com/roadrunner-server/sdk/v2 v2.13.3
+	github.com/roadrunner-server/sdk/v2 v2.14.0
 	go.opentelemetry.io/otel/trace v1.7.0
 )
 
@@ -19,6 +19,6 @@ require (
 	github.com/roadrunner-server/errors v1.1.2 // indirect
 	github.com/roadrunner-server/tcplisten v1.1.2 // indirect
 	go.opentelemetry.io/otel v1.7.0 // indirect
-	golang.org/x/sys v0.0.0-20220429121018-84afa8d3f7b3 // indirect
+	golang.org/x/sys v0.0.0-20220429233432-b5fbb4746d32 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 )
