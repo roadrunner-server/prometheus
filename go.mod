@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/prometheus/client_golang v1.12.2
-	github.com/roadrunner-server/sdk/v2 v2.14.0
+	github.com/roadrunner-server/sdk/v2 v2.14.1
 	go.opentelemetry.io/otel/trace v1.7.0
 )
 
