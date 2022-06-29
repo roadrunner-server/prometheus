@@ -8,6 +8,10 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/roadrunner-server/sdk/v2/utils"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	jprop "go.opentelemetry.io/contrib/propagators/jaeger"
+	"go.opentelemetry.io/otel/propagation"
+	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -22,6 +26,7 @@ const (
 
 type Plugin struct {
 	writersPool sync.Pool
+	prop        propagation.TextMapPropagator
 	stopCh      chan struct{}
 
 	queueSize       prometheus.Gauge
@@ -74,6 +79,8 @@ func (p *Plugin) Init() error {
 		Help:      "Uptime in seconds",
 	}, nil)
 
+	p.prop = propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}, jprop.Jaeger{})
+
 	return nil
 }
 
@@ -102,8 +109,13 @@ func (p *Plugin) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if val, ok := r.Context().Value(utils.OtelTracerNameKey).(string); ok {
 			tp := trace.SpanFromContext(r.Context()).TracerProvider()
-			ctx, span := tp.Tracer(val).Start(r.Context(), pluginName)
+			ctx, span := tp.Tracer(val, trace.WithSchemaURL(semconv.SchemaURL),
+				trace.WithInstrumentationVersion(otelhttp.SemVersion())).
+				Start(r.Context(), pluginName, trace.WithSpanKind(trace.SpanKindServer))
 			defer span.End()
+
+			// inject
+			p.prop.Inject(ctx, propagation.HeaderCarrier(r.Header))
 			r = r.WithContext(ctx)
 		}
 
