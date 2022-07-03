@@ -25,6 +25,6 @@ require (
 	github.com/roadrunner-server/errors v1.1.2 // indirect
 	github.com/roadrunner-server/tcplisten v1.1.2 // indirect
 	go.opentelemetry.io/otel/metric v0.30.0 // indirect
-	golang.org/x/sys v0.0.0-20220627191245-f75cf1eec38b // indirect
+	golang.org/x/sys v0.0.0-20220702020025-31831981b65f // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 )
