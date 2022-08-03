@@ -5,10 +5,10 @@ go 1.18
 require (
 	github.com/prometheus/client_golang v1.12.2
 	github.com/roadrunner-server/sdk/v2 v2.18.2
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.33.0
-	go.opentelemetry.io/contrib/propagators/jaeger v1.8.0
-	go.opentelemetry.io/otel v1.8.0
-	go.opentelemetry.io/otel/trace v1.8.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.34.0
+	go.opentelemetry.io/contrib/propagators/jaeger v1.9.0
+	go.opentelemetry.io/otel v1.9.0
+	go.opentelemetry.io/otel/trace v1.9.0
 )
 
 require (
