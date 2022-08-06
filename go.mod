@@ -3,7 +3,7 @@ module github.com/roadrunner-server/prometheus/v2
 go 1.19
 
 require (
-	github.com/prometheus/client_golang v1.12.2
+	github.com/prometheus/client_golang v1.13.0
 	github.com/roadrunner-server/sdk/v2 v2.18.2
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.34.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.9.0
