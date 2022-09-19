@@ -24,7 +24,7 @@ require (
 	github.com/prometheus/procfs v0.8.0 // indirect
 	github.com/roadrunner-server/errors v1.2.0 // indirect
 	github.com/roadrunner-server/tcplisten v1.2.0 // indirect
-	go.opentelemetry.io/otel/metric v0.31.0 // indirect
+	go.opentelemetry.io/otel/metric v0.32.0 // indirect
 	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 )
