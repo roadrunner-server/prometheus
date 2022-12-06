@@ -7,8 +7,8 @@ require (
 	github.com/roadrunner-server/sdk/v3 v3.0.1
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.36.4
 	go.opentelemetry.io/contrib/propagators/jaeger v1.11.1
-	go.opentelemetry.io/otel v1.11.1
-	go.opentelemetry.io/otel/trace v1.11.1
+	go.opentelemetry.io/otel v1.11.2
+	go.opentelemetry.io/otel/trace v1.11.2
 )
 
 require (
