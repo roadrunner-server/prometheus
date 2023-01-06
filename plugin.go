@@ -1,6 +1,7 @@
 package prometheus
 
 import (
+	"context"
 	"net/http"
 	"strconv"
 	"sync"
@@ -38,7 +39,7 @@ type Plugin struct {
 
 func (p *Plugin) Init() error {
 	p.writersPool = sync.Pool{
-		New: func() interface{} {
+		New: func() any {
 			wr := new(writer)
 			wr.code = -1
 			return wr
@@ -100,7 +101,7 @@ func (p *Plugin) Serve() chan error {
 	return make(chan error, 1)
 }
 
-func (p *Plugin) Stop() error {
+func (p *Plugin) Stop(context.Context) error {
 	p.stopCh <- struct{}{}
 	return nil
 }
