@@ -1,2 +1,1 @@
-# prometheus
-RRv2 prometheus metrics HTTP middleware
+# Docs: [link](https://roadrunner.dev/docs/plugins-metrics/2.x/en)
