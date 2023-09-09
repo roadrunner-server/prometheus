@@ -6,7 +6,7 @@ toolchain go1.21.0
 
 require (
 	github.com/prometheus/client_golang v1.16.0
-	github.com/roadrunner-server/sdk/v4 v4.3.2
+	github.com/roadrunner-server/sdk/v4 v4.4.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.43.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.18.0
 	go.opentelemetry.io/otel v1.17.0
