@@ -32,6 +32,8 @@ github.com/roadrunner-server/errors v1.3.0 h1:kLVXpXne0jMReN7pj8KIhyYyjqKjsPC5DR
 github.com/roadrunner-server/errors v1.3.0/go.mod h1:XYVuhXvxi3yQaP/zCLB6QRZ0JvQIRaBa0SKFHL4WLKg=
 github.com/roadrunner-server/sdk/v4 v4.5.3 h1:H+4FCJ69aa3x+FpwZM/sK2SeSt7B79hcw4jRz0Dgsoo=
 github.com/roadrunner-server/sdk/v4 v4.5.3/go.mod h1:5a6cxpWcqyJYgDUbj49CjJTnn0V911SrDodrCvoS83o=
+github.com/roadrunner-server/sdk/v4 v4.5.4 h1:LCHU8XrXPBJ9js6dtuUnG0ANEiueUf1nGoJVSNQyZMk=
+github.com/roadrunner-server/sdk/v4 v4.5.4/go.mod h1:6kSBXEUs2Je7IviqkAuZWQ7b/Vc2mxgS/IK7cAJ1Kkw=
 github.com/roadrunner-server/tcplisten v1.4.0 h1:yWo09zktv/CSV6VywLfw4pwNcUchgTiIrW4uIICtO5M=
 github.com/roadrunner-server/tcplisten v1.4.0/go.mod h1:A6+VSnW2ETGnN/e/CMdP63ZXqQDaC0UDMU6QmyuB0yM=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
