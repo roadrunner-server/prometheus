@@ -7,10 +7,10 @@ toolchain go1.21.5
 require (
 	github.com/prometheus/client_golang v1.18.0
 	github.com/roadrunner-server/sdk/v4 v4.6.0
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.47.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.48.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.22.0
-	go.opentelemetry.io/otel v1.22.0
-	go.opentelemetry.io/otel/trace v1.22.0
+	go.opentelemetry.io/otel v1.23.0
+	go.opentelemetry.io/otel/trace v1.23.0
 )
 
 require (
@@ -24,7 +24,7 @@ require (
 	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/roadrunner-server/errors v1.4.0 // indirect
 	github.com/roadrunner-server/tcplisten v1.4.0 // indirect
-	go.opentelemetry.io/otel/metric v1.22.0 // indirect
+	go.opentelemetry.io/otel/metric v1.23.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
 )
