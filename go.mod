@@ -4,7 +4,7 @@ go 1.22.2
 
 require (
 	github.com/prometheus/client_golang v1.19.0
-	github.com/roadrunner-server/sdk/v4 v4.7.0
+	github.com/roadrunner-server/sdk/v4 v4.7.1
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.50.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.25.0
 	go.opentelemetry.io/otel v1.25.0
