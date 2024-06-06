@@ -1,6 +1,6 @@
 module github.com/roadrunner-server/prometheus/v4
 
-go 1.22.3
+go 1.22.4
 
 require (
 	github.com/prometheus/client_golang v1.19.1
