@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/roadrunner-server/sdk/v4/utils"
+	rrcontext "github.com/roadrunner-server/context"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	jprop "go.opentelemetry.io/contrib/propagators/jaeger"
 	"go.opentelemetry.io/otel/propagation"
@@ -108,7 +108,7 @@ func (p *Plugin) Stop(context.Context) error {
 
 func (p *Plugin) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if val, ok := r.Context().Value(utils.OtelTracerNameKey).(string); ok {
+		if val, ok := r.Context().Value(rrcontext.OtelTracerNameKey).(string); ok {
 			tp := trace.SpanFromContext(r.Context()).TracerProvider()
 			ctx, span := tp.Tracer(val, trace.WithSchemaURL(semconv.SchemaURL),
 				trace.WithInstrumentationVersion(otelhttp.Version())).
