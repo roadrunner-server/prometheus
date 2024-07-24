@@ -25,8 +25,8 @@ github.com/prometheus/common v0.55.0 h1:KEi6DK7lXW/m7Ig5i47x0vRzuBsHuvJdi5ee6Y3G
 github.com/prometheus/common v0.55.0/go.mod h1:2SECS4xJG1kd8XF9IcM1gMX6510RAEL65zxzNImwdc8=
 github.com/prometheus/procfs v0.15.1 h1:YagwOFzUgYfKKHX6Dr+sHT7km/hxC76UB0learggepc=
 github.com/prometheus/procfs v0.15.1/go.mod h1:fB45yRUv8NstnjriLhBQLuOUt+WW4BsoGhij/e3PBqk=
-github.com/roadrunner-server/context v1.0.0 h1:KKqTQkiJPEzuesJW2v6CIy4T4WUYOOhmftITjUDBASE=
-github.com/roadrunner-server/context v1.0.0/go.mod h1:rF0U1emlrMXBwvVoocD4ER/uJMytzVoXYt/kuflKKnA=
+github.com/roadrunner-server/context v1.0.1 h1:6onQ5L1ZsjZFNkPyY7Kd0Lx3+aRTfbbh4OryfrRuknU=
+github.com/roadrunner-server/context v1.0.1/go.mod h1:rgQ4mT7HrDZG+KhU6trFBGPHHpjTOxHGRk/sPKLVwrg=
 github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.53.0 h1:4K4tsIXefpVJtvA/8srF4V4y0akAoPHkIslgAkjixJA=
