@@ -7,7 +7,7 @@ toolchain go1.23.2
 require (
 	github.com/prometheus/client_golang v1.20.4
 	github.com/roadrunner-server/context v1.0.1
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.55.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.56.0
 	go.opentelemetry.io/contrib/propagators/jaeger v1.30.0
 	go.opentelemetry.io/otel v1.31.0
 	go.opentelemetry.io/otel/trace v1.31.0
