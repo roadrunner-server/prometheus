@@ -70,6 +70,8 @@ func (p *Plugin) Init() error {
 			Namespace: namespace,
 			Name:      "request_duration_seconds",
 			Help:      "HTTP request duration.",
+			// Extended buckets to track slow requests (>10s)
+			Buckets: []float64{.005, .01, .025, .05, .1, .25, .5, 1, 2.5, 5, 10, 20, 30, 60},
 		},
 		[]string{"status"},
 	)
