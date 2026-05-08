@@ -23,6 +23,8 @@ const (
 	// should be in sync with the http/handler.go constants
 	noWorkers string = "No-Workers"
 	trueStr   string = "true"
+
+	statusLabel string = "status"
 )
 
 type Plugin struct {
@@ -63,7 +65,7 @@ func (p *Plugin) Init() error {
 		Namespace: namespace,
 		Name:      "request_total",
 		Help:      "Total number of handled http requests after server restart.",
-	}, []string{"status"})
+	}, []string{statusLabel})
 
 	p.requestDuration = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
@@ -73,7 +75,7 @@ func (p *Plugin) Init() error {
 			// Extended buckets to track slow requests (>10s)
 			Buckets: []float64{.005, .01, .025, .05, .1, .25, .5, 1, 2.5, 5, 10, 20, 30, 60},
 		},
-		[]string{"status"},
+		[]string{statusLabel},
 	)
 
 	p.uptime = prometheus.NewCounterVec(prometheus.CounterOpts{
@@ -110,16 +112,20 @@ func (p *Plugin) Stop(context.Context) error {
 
 func (p *Plugin) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var otelVal string
+		var tp trace.TracerProvider
+
 		if val, ok := r.Context().Value(rrcontext.OtelTracerNameKey).(string); ok {
-			tp := trace.SpanFromContext(r.Context()).TracerProvider()
+			otelVal = val
+			tp = trace.SpanFromContext(r.Context()).TracerProvider()
 			ctx, span := tp.Tracer(val, trace.WithSchemaURL(semconv.SchemaURL),
 				trace.WithInstrumentationVersion(otelhttp.Version)).
-				Start(r.Context(), pluginName, trace.WithSpanKind(trace.SpanKindServer))
-			defer span.End()
+				Start(r.Context(), pluginName, trace.WithSpanKind(trace.SpanKindInternal))
 
 			// inject
 			p.prop.Inject(ctx, propagation.HeaderCarrier(r.Header))
 			r = r.WithContext(ctx)
+			span.End()
 		}
 
 		start := time.Now()
@@ -132,19 +138,31 @@ func (p *Plugin) Middleware(next http.Handler) http.Handler {
 
 		next.ServeHTTP(rrWriter, r)
 
+		// start a second span for the post-processing metrics recording
+		var postSpan trace.Span
+		if otelVal != "" {
+			_, postSpan = tp.Tracer(otelVal, trace.WithSchemaURL(semconv.SchemaURL),
+				trace.WithInstrumentationVersion(otelhttp.Version)).
+				Start(r.Context(), pluginName+":post", trace.WithSpanKind(trace.SpanKindInternal))
+		}
+
 		if w.Header().Get(noWorkers) == trueStr {
 			p.noFreeWorkers.With(nil).Inc()
 		}
 
 		p.requestCounter.With(prometheus.Labels{
-			"status": strconv.Itoa(rrWriter.code),
+			statusLabel: strconv.Itoa(rrWriter.code),
 		}).Inc()
 
 		p.requestDuration.With(prometheus.Labels{
-			"status": strconv.Itoa(rrWriter.code),
+			statusLabel: strconv.Itoa(rrWriter.code),
 		}).Observe(time.Since(start).Seconds())
 
 		p.queueSize.Dec()
+
+		if postSpan != nil {
+			postSpan.End()
+		}
 	})
 }
 
