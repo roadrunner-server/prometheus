@@ -33,10 +33,10 @@ type Plugin struct {
 	stopCh      chan struct{}
 
 	queueSize       prometheus.Gauge
-	noFreeWorkers   *prometheus.CounterVec
+	noFreeWorkers   prometheus.Counter
 	requestCounter  *prometheus.CounterVec
 	requestDuration *prometheus.HistogramVec
-	uptime          *prometheus.CounterVec
+	uptime          prometheus.Counter
 }
 
 func (p *Plugin) Init() error {
@@ -48,18 +48,18 @@ func (p *Plugin) Init() error {
 		},
 	}
 
-	p.stopCh = make(chan struct{}, 1)
+	p.stopCh = make(chan struct{})
 	p.queueSize = prometheus.NewGauge(prometheus.GaugeOpts{
 		Namespace: namespace,
 		Name:      "requests_queue",
 		Help:      "Total number of queued requests.",
 	})
 
-	p.noFreeWorkers = prometheus.NewCounterVec(prometheus.CounterOpts{
+	p.noFreeWorkers = prometheus.NewCounter(prometheus.CounterOpts{
 		Namespace: namespace,
 		Name:      "no_free_workers_total",
 		Help:      "Total number of NoFreeWorkers occurrences.",
-	}, nil)
+	})
 
 	p.requestCounter = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Namespace: namespace,
@@ -78,11 +78,11 @@ func (p *Plugin) Init() error {
 		[]string{statusLabel},
 	)
 
-	p.uptime = prometheus.NewCounterVec(prometheus.CounterOpts{
+	p.uptime = prometheus.NewCounter(prometheus.CounterOpts{
 		Namespace: namespace,
 		Name:      "uptime_seconds",
 		Help:      "Uptime in seconds",
-	}, nil)
+	})
 
 	p.prop = propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}, jprop.Jaeger{})
 
@@ -98,7 +98,7 @@ func (p *Plugin) Serve() chan error {
 			case <-p.stopCh:
 				return
 			case <-ticker.C:
-				p.uptime.With(nil).Inc()
+				p.uptime.Inc()
 			}
 		}
 	}()
@@ -106,14 +106,14 @@ func (p *Plugin) Serve() chan error {
 }
 
 func (p *Plugin) Stop(context.Context) error {
-	p.stopCh <- struct{}{}
+	close(p.stopCh)
 	return nil
 }
 
 func (p *Plugin) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var otelVal string
 		var tp trace.TracerProvider
+		var otelVal string
 
 		if val, ok := r.Context().Value(rrcontext.OtelTracerNameKey).(string); ok {
 			otelVal = val
@@ -147,15 +147,16 @@ func (p *Plugin) Middleware(next http.Handler) http.Handler {
 		}
 
 		if w.Header().Get(noWorkers) == trueStr {
-			p.noFreeWorkers.With(nil).Inc()
+			p.noFreeWorkers.Inc()
 		}
 
+		statusCode := strconv.Itoa(rrWriter.code)
 		p.requestCounter.With(prometheus.Labels{
-			statusLabel: strconv.Itoa(rrWriter.code),
+			statusLabel: statusCode,
 		}).Inc()
 
 		p.requestDuration.With(prometheus.Labels{
-			statusLabel: strconv.Itoa(rrWriter.code),
+			statusLabel: statusCode,
 		}).Observe(time.Since(start).Seconds())
 
 		p.queueSize.Dec()
