@@ -151,13 +151,9 @@ func (p *Plugin) Middleware(next http.Handler) http.Handler {
 		}
 
 		statusCode := strconv.Itoa(rrWriter.code)
-		p.requestCounter.With(prometheus.Labels{
-			statusLabel: statusCode,
-		}).Inc()
+		p.requestCounter.WithLabelValues(statusCode).Inc()
 
-		p.requestDuration.With(prometheus.Labels{
-			statusLabel: statusCode,
-		}).Observe(time.Since(start).Seconds())
+		p.requestDuration.WithLabelValues(statusCode).Observe(time.Since(start).Seconds())
 
 		p.queueSize.Dec()
 
